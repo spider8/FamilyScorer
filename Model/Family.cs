@@ -12,6 +12,13 @@
                 throw new ArgumentException("Families must have at least 2 members");
             }
 
+            bool haveOneSuitor = FamilyMembers.Count(person => person.IsSuitor) == 1;
+
+            if (!haveOneSuitor)
+            {
+                throw new ArgumentException("Families must have a suitor");
+            }
+
             bool hasDistinctIds = FamilyMembers.Select(person => person.Id).Distinct().Count() == FamilyMembers.Count;
 
             if (!hasDistinctIds)

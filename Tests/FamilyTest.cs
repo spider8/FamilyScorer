@@ -16,12 +16,26 @@ namespace FamilyScorer.Tests
         }
 
         [Fact]
-        public void ShouldHaveDistinctMembersIds()
+        public void ShoundThrowAExceptionIfAnyMemberIsASuitor()
         {
             Family family;
             List<FamilyMember> Members =
             [
                 new FamilyMember { Id = "1", Name = "Pedro",BirthDay = new DateOnly(1990, 10, 10)},
+                new FamilyMember { Id = "2", Name = "Bia", BirthDay = new DateOnly(1990, 9, 9)},
+            ];
+
+            Action action = () => { family = new Family(Members); };
+            action.Should().Throw<ArgumentException>().WithMessage("Families must have a suitor");
+        }
+
+        [Fact]
+        public void ShouldHaveDistinctMembersIds()
+        {
+            Family family;
+            List<FamilyMember> Members =
+            [
+                new FamilyMember { Id = "1", Name = "Pedro",BirthDay = new DateOnly(1990, 10, 10), IsSuitor = true},
                 new FamilyMember { Id = "1", Name = "Bia", BirthDay = new DateOnly(1990, 9, 9) },
             ];
 
@@ -35,7 +49,7 @@ namespace FamilyScorer.Tests
 
             List<FamilyMember> Members =
             [
-                new FamilyMember { Id = "1", Name = "Pedro", Income = 10},
+                new FamilyMember { Id = "1", Name = "Pedro", Income = 10, IsSuitor = true},
                 new FamilyMember { Id = "2", Name = "Bia", Income = 20},
             ];
 
@@ -50,7 +64,7 @@ namespace FamilyScorer.Tests
             List<FamilyMember> Members =
             [
                 new FamilyMember { Id = "1", Name = "Pedro", BirthDay = new DateOnly(1990, 10, 10)},
-                new FamilyMember { Id = "2", Name = "Bia", BirthDay = new DateOnly(1995, 12, 12)},
+                new FamilyMember { Id = "2", Name = "Bia", BirthDay = new DateOnly(1995, 12, 12), IsSuitor = true},
 
                 // This member is a dependent
                 new FamilyMember { Id = "3", Name = "Ana", BirthDay = new DateOnly(2020, 8, 8)},

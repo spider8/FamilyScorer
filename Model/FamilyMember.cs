@@ -5,10 +5,10 @@
         public string Id { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
         public DateOnly BirthDay { get; set; }
-        public bool IsHeadOfFamily { get; set; }
+        public bool IsSuitor { get; set; } = false;
         public int Income { get; set; }
 
-        public FamilyMember(string Id, string Name, DateOnly BirthDay, Boolean IsHeadOfFamily, int Income = 0) : this()
+        public FamilyMember(string Id, string Name, DateOnly BirthDay, Boolean IsSuitor, int Income = 0) : this()
         {
             if (string.IsNullOrEmpty(Id))
             {
@@ -23,7 +23,7 @@
             this.Id = Id;
             this.Name = Name;
             this.BirthDay = BirthDay;
-            this.IsHeadOfFamily = IsHeadOfFamily;
+            this.IsSuitor = IsSuitor;
             this.Income = Income;
 
         }
