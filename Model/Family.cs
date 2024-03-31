@@ -1,11 +1,13 @@
-﻿namespace FamilyScorer.Model
+﻿using FamilyScorer.Interfaces;
+
+namespace FamilyScorer.Model
 {
-    public class Family
+    public class Family : IFamily
     {
-        public List<FamilyMember> FamilyMembers { get; set; }
+        public List<IFamilyMember> FamilyMembers { get; set; }
         public int Adulthood = 18;
 
-        public Family(List<FamilyMember> FamilyMembers)
+        public Family(List<IFamilyMember> FamilyMembers)
         {
             if (FamilyMembers.Count < 2)
             {
@@ -34,7 +36,7 @@
             return FamilyMembers.Sum(person => person.Income);
         }
 
-        public List<FamilyMember> GetDependents()
+        public List<IFamilyMember> GetDependents()
         {
             var CurrentYear = DateTime.Today.Year;
 

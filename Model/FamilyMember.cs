@@ -1,6 +1,8 @@
-﻿namespace FamilyScorer.Model
+﻿using FamilyScorer.Interfaces;
+
+namespace FamilyScorer.Model
 {
-    public class FamilyMember()
+    public class FamilyMember() : IFamilyMember
     {
         public string Id { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
@@ -8,7 +10,7 @@
         public bool IsSuitor { get; set; } = false;
         public int Income { get; set; }
 
-        public FamilyMember(string Id, string Name, DateOnly BirthDay, Boolean IsSuitor, int Income = 0) : this()
+        public FamilyMember(string Id, string Name, DateOnly BirthDay, bool IsSuitor, int Income = 0) : this()
         {
             if (string.IsNullOrEmpty(Id))
             {

@@ -1,3 +1,4 @@
+using FamilyScorer.Interfaces;
 using FamilyScorer.Model;
 using FluentAssertions;
 
@@ -6,20 +7,20 @@ namespace FamilyScorer.Tests
     public class FamilyTest
     {
         [Fact]
-        public void ShoundThrowAExceptionIfNoListOfMembersIsPassedToTheConstructor()
+        public void ShouldhrowAExceptionIfNoListOfMembersIsPassedToTheConstructor()
         {
             Family family;
-            List<FamilyMember> Members = new();
+            List<IFamilyMember> Members = [];
 
             Action action = () => { family = new Family(Members); };
             action.Should().Throw<ArgumentException>().WithMessage("Families must have at least 2 members");
         }
 
         [Fact]
-        public void ShoundThrowAExceptionIfAnyMemberIsASuitor()
+        public void ShouldThrowAExceptionIfAnyMemberIsASuitor()
         {
             Family family;
-            List<FamilyMember> Members =
+            List<IFamilyMember> Members =
             [
                 new FamilyMember { Id = "1", Name = "Pedro",BirthDay = new DateOnly(1990, 10, 10)},
                 new FamilyMember { Id = "2", Name = "Bia", BirthDay = new DateOnly(1990, 9, 9)},
@@ -33,7 +34,7 @@ namespace FamilyScorer.Tests
         public void ShouldHaveDistinctMembersIds()
         {
             Family family;
-            List<FamilyMember> Members =
+            List<IFamilyMember> Members =
             [
                 new FamilyMember { Id = "1", Name = "Pedro",BirthDay = new DateOnly(1990, 10, 10), IsSuitor = true},
                 new FamilyMember { Id = "1", Name = "Bia", BirthDay = new DateOnly(1990, 9, 9) },
@@ -47,7 +48,7 @@ namespace FamilyScorer.Tests
         public void ShouldBePossibleCalculateTheFamilyIncome() 
         {
 
-            List<FamilyMember> Members =
+            List<IFamilyMember> Members =
             [
                 new FamilyMember { Id = "1", Name = "Pedro", Income = 10, IsSuitor = true},
                 new FamilyMember { Id = "2", Name = "Bia", Income = 20},
@@ -61,7 +62,7 @@ namespace FamilyScorer.Tests
         public void ShouldReturnAListOfDependentFamilyMembers()
         {
 
-            List<FamilyMember> Members =
+            List<IFamilyMember> Members =
             [
                 new FamilyMember { Id = "1", Name = "Pedro", BirthDay = new DateOnly(1990, 10, 10)},
                 new FamilyMember { Id = "2", Name = "Bia", BirthDay = new DateOnly(1995, 12, 12), IsSuitor = true},

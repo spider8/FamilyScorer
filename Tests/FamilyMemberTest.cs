@@ -1,7 +1,7 @@
 using FamilyScorer.Model;
 using FluentAssertions;
 
-namespace FamilyScore.Tests
+namespace FamilyScorer.Tests
 {
     public class FamilyMemberTest
     {
