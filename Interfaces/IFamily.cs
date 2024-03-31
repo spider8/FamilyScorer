@@ -5,6 +5,6 @@
         List<IFamilyMember> FamilyMembers { get; set; }
 
         int CalculateIncome();
-        List<IFamilyMember> GetDependents();
+        List<IFamilyMember> GetMinorsDependents();
     }
 }

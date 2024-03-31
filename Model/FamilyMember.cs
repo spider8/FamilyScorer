@@ -7,10 +7,10 @@ namespace FamilyScorer.Model
         public string Id { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
         public DateOnly BirthDay { get; set; }
-        public bool IsSuitor { get; set; } = false;
+        public FamilyRole Role { get; set; } = FamilyRole.Dependent;
         public int Income { get; set; }
 
-        public FamilyMember(string Id, string Name, DateOnly BirthDay, bool IsSuitor, int Income = 0) : this()
+        public FamilyMember(string Id, string Name, DateOnly BirthDay, FamilyRole Role, int Income = 0) : this()
         {
             if (string.IsNullOrEmpty(Id))
             {
@@ -25,7 +25,7 @@ namespace FamilyScorer.Model
             this.Id = Id;
             this.Name = Name;
             this.BirthDay = BirthDay;
-            this.IsSuitor = IsSuitor;
+            this.Role = Role;
             this.Income = Income;
 
         }

@@ -23,11 +23,25 @@ namespace FamilyScorer.Tests
             List<IFamilyMember> Members =
             [
                 new FamilyMember { Id = "1", Name = "Pedro",BirthDay = new DateOnly(1990, 10, 10)},
-                new FamilyMember { Id = "2", Name = "Bia", BirthDay = new DateOnly(1990, 9, 9)},
+                new FamilyMember { Id = "2", Name = "Bia", BirthDay = new DateOnly(1990, 9, 9), Role = FamilyRole.Spouse},
             ];
 
             Action action = () => { family = new Family(Members); };
             action.Should().Throw<ArgumentException>().WithMessage("Families must have a suitor");
+        }
+
+        [Fact]
+        public void ShouldThrowAExceptionIfAnyMemberIsASpouse()
+        {
+            Family family;
+            List<IFamilyMember> Members =
+            [
+                new FamilyMember { Id = "1", Name = "Pedro",BirthDay = new DateOnly(1990, 10, 10), Role = FamilyRole.Suitor},
+                new FamilyMember { Id = "2", Name = "Bia", BirthDay = new DateOnly(1990, 9, 9)},
+            ];
+
+            Action action = () => { family = new Family(Members); };
+            action.Should().Throw<ArgumentException>().WithMessage("Families must have a spouse");
         }
 
         [Fact]
@@ -36,8 +50,8 @@ namespace FamilyScorer.Tests
             Family family;
             List<IFamilyMember> Members =
             [
-                new FamilyMember { Id = "1", Name = "Pedro",BirthDay = new DateOnly(1990, 10, 10), IsSuitor = true},
-                new FamilyMember { Id = "1", Name = "Bia", BirthDay = new DateOnly(1990, 9, 9) },
+                new FamilyMember { Id = "1", Name = "Pedro",BirthDay = new DateOnly(1990, 10, 10), Role = FamilyRole.Spouse},
+                new FamilyMember { Id = "1", Name = "Bia", BirthDay = new DateOnly(1990, 9, 9), Role = FamilyRole.Suitor },
             ];
 
             Action action = () => { family = new Family(Members); };
@@ -50,8 +64,8 @@ namespace FamilyScorer.Tests
 
             List<IFamilyMember> Members =
             [
-                new FamilyMember { Id = "1", Name = "Pedro", Income = 10, IsSuitor = true},
-                new FamilyMember { Id = "2", Name = "Bia", Income = 20},
+                new FamilyMember { Id = "1", Name = "Pedro", Income = 10, Role = FamilyRole.Suitor},
+                new FamilyMember { Id = "2", Name = "Bia", Income = 20, Role = FamilyRole.Spouse},
             ];
 
             Family Family = new (Members);
@@ -59,22 +73,23 @@ namespace FamilyScorer.Tests
         }
 
         [Fact]
-        public void ShouldReturnAListOfDependentFamilyMembers()
+        public void ShouldReturnAListOfMinorsDependentFamilyMembers()
         {
 
             List<IFamilyMember> Members =
             [
-                new FamilyMember { Id = "1", Name = "Pedro", BirthDay = new DateOnly(1990, 10, 10)},
-                new FamilyMember { Id = "2", Name = "Bia", BirthDay = new DateOnly(1995, 12, 12), IsSuitor = true},
+                new FamilyMember { Id = "1", Name = "Pedro", BirthDay = new DateOnly(1990, 10, 10), Role = FamilyRole.Spouse},
+                new FamilyMember { Id = "2", Name = "Bia", BirthDay = new DateOnly(1995, 12, 12), Role = FamilyRole.Suitor},
 
-                // This member is a dependent
-                new FamilyMember { Id = "3", Name = "Ana", BirthDay = new DateOnly(2020, 8, 8)},
+                new FamilyMember { Id = "3", Name = "Caio", BirthDay = new DateOnly(2003, 1, 1)},
+
+                // This member is a minor dependent
+                new FamilyMember { Id = "4", Name = "Ana", BirthDay = new DateOnly(2020, 8, 8)},
 
             ];
 
             Family Family = new(Members);
-            Family.GetDependents().Should().Equal(Members.Where(member => member.Name == "Ana"));
-
+            Family.GetMinorsDependents().Should().Equal(Members.Where(member => member.Name == "Ana"));
         }
     }
 }

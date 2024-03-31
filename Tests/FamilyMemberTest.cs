@@ -1,3 +1,4 @@
+using FamilyScorer.Interfaces;
 using FamilyScorer.Model;
 using FluentAssertions;
 
@@ -11,14 +12,13 @@ namespace FamilyScorer.Tests
             var Id = "123";
             var Name = "Pedro";
             var BirthDay = new DateOnly(1990, 2, 22);
-            var IsSuitor = true;
 
-            FamilyMember familyMember = new(Id, Name, BirthDay, IsSuitor);
+            FamilyMember familyMember = new(Id, Name, BirthDay, FamilyRole.Suitor);
 
             familyMember.Id.Should().Be(Id);
             familyMember.Name.Should().Be(Name);
             familyMember.BirthDay.Should().Be(BirthDay);
-            familyMember.IsSuitor.Should().Be(IsSuitor);
+            familyMember.Role.Should().Be(FamilyRole.Suitor);
         }
 
         [Fact]
@@ -26,11 +26,9 @@ namespace FamilyScorer.Tests
         {
             var Name = "Pedro";
             var BirthDay = new DateOnly(1990, 2, 22);
-            var IsSuitor = true;
-
 
             FamilyMember familyMember;
-            Action action = () => { familyMember = new FamilyMember(Id: string.Empty, Name, BirthDay, IsSuitor); };
+            Action action = () => { familyMember = new FamilyMember(Id: string.Empty, Name, BirthDay, FamilyRole.Suitor); };
 
             action.Should().Throw<ArgumentException>().WithMessage("The id param should be valid");
         }
@@ -40,11 +38,9 @@ namespace FamilyScorer.Tests
         {
             var Id = "123";
             var BirthDay = new DateOnly(1990, 2, 22);
-            var IsSuitor = true;
-
 
             FamilyMember familyMember;
-            Action action = () => { familyMember = new FamilyMember(Id, Name: string.Empty, BirthDay, IsSuitor); };
+            Action action = () => { familyMember = new FamilyMember(Id, Name: string.Empty, BirthDay, FamilyRole.Suitor); };
 
             action.Should().Throw<ArgumentException>().WithMessage("The name param must not be empty");
         }

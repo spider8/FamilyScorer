@@ -14,11 +14,18 @@ namespace FamilyScorer.Model
                 throw new ArgumentException("Families must have at least 2 members");
             }
 
-            bool haveOneSuitor = FamilyMembers.Count(person => person.IsSuitor) == 1;
+            bool haveOneSuitor = FamilyMembers.Count(person => person.Role == FamilyRole.Suitor) == 1;
 
             if (!haveOneSuitor)
             {
                 throw new ArgumentException("Families must have a suitor");
+            }
+
+            bool haveOneSpouse = FamilyMembers.Count(person => person.Role == FamilyRole.Spouse) == 1;
+
+            if (!haveOneSpouse)
+            {
+                throw new ArgumentException("Families must have a spouse");
             }
 
             bool hasDistinctIds = FamilyMembers.Select(person => person.Id).Distinct().Count() == FamilyMembers.Count;
@@ -36,7 +43,7 @@ namespace FamilyScorer.Model
             return FamilyMembers.Sum(person => person.Income);
         }
 
-        public List<IFamilyMember> GetDependents()
+        public List<IFamilyMember> GetMinorsDependents()
         {
             var CurrentYear = DateTime.Today.Year;
 
