@@ -4,13 +4,25 @@ namespace FamilyScorer.Model
 {
     public class FamilyRank : IFamilyRank
     {
-        public FamilyRank() {
-            throw new ArgumentException("A list of families and ranking criteria are required");
-        }
 
-        public List<IFamilyMember> RankFamilies(List<IFamily> Families, List<IRankingCriteria> RankingCriterias)
+        public List<IFamily> RankFamilies(List<IFamily> Families, List<IRankingCriteria> RankingCriterias)
         {
-            throw new NotImplementedException();
+            Dictionary<IFamily, int> FamiliesScores = [];
+
+            foreach (var Familiy in Families)
+            {
+                int score = 0;
+                
+                foreach (var RankingCriteria in RankingCriterias)
+                {
+                    score +=  (RankingCriteria.Rank(Familiy));
+                }
+
+                FamiliesScores.Add(Familiy, score);
+            }
+
+            List<IFamily> OrderedRankFamilies = (List<IFamily>)(from entry in FamiliesScores orderby entry.Value descending select entry.Key).ToList();
+            return OrderedRankFamilies;
         }
     }
 }

@@ -6,9 +6,9 @@ namespace FamilyScorer.Model
     {
         public string Id { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
-        public DateOnly BirthDay { get; set; }
+        public DateOnly BirthDay { get; set; } = new DateOnly(1990, 10, 10);
         public FamilyRole Role { get; set; } = FamilyRole.Dependent;
-        public int Income { get; set; }
+        public int Income { get; set; } = 0;
 
         public FamilyMember(string Id, string Name, DateOnly BirthDay, FamilyRole Role, int Income = 0) : this()
         {

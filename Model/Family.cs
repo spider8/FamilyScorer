@@ -4,7 +4,8 @@ namespace FamilyScorer.Model
 {
     public class Family : IFamily
     {
-        public List<IFamilyMember> FamilyMembers { get; set; }
+        public List<IFamilyMember> FamilyMembers { get; set; } = [];
+        int counterId = 0;
         public int Adulthood = 18;
 
         public Family(List<IFamilyMember> FamilyMembers)
@@ -37,6 +38,31 @@ namespace FamilyScorer.Model
 
             this.FamilyMembers = FamilyMembers;
         }
+        string GenerateANewId() 
+        { 
+            return counterId++.ToString();
+        }
+
+        public Family(string SuitorName, int NumberOfDependents, int Income, int NumberOfMinorsDependents)
+        {
+            // Create a suitor
+            FamilyMembers.Add(new FamilyMember() { Name = SuitorName, Id = GenerateANewId(), Income = Income, Role = FamilyRole.Suitor, });
+
+            // Create a Spouse
+            FamilyMembers.Add(new FamilyMember() { Id = GenerateANewId(), Role = FamilyRole.Spouse });
+
+
+            for (int index = 0; index < NumberOfDependents; index++)
+            {
+                FamilyMembers.Add(new FamilyMember() { Id = GenerateANewId(), Role = FamilyRole.Dependent });
+            }
+
+            for (int index = 0; index < NumberOfMinorsDependents; index++)
+            {
+                FamilyMembers.Add(new FamilyMember() { Id = GenerateANewId(), Role = FamilyRole.Dependent, BirthDay = new DateOnly(2020, 10, 11)});
+            }
+
+        }
 
         public int CalculateIncome()
         {
@@ -48,6 +74,11 @@ namespace FamilyScorer.Model
             var CurrentYear = DateTime.Today.Year;
 
             return FamilyMembers.Where(Member => (CurrentYear - Member.BirthDay.Year) <= Adulthood).ToList();
+        }
+
+        public IFamilyMember GetSuitor()
+        {
+            return FamilyMembers.Where(family => family.Role == FamilyRole.Suitor).ToList().First();
         }
     }
 }

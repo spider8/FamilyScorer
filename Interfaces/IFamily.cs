@@ -6,5 +6,6 @@
 
         int CalculateIncome();
         List<IFamilyMember> GetMinorsDependents();
+        IFamilyMember GetSuitor();
     }
 }
