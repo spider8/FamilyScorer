@@ -95,5 +95,37 @@ namespace FamilyScorer.Tests
 
             NamesOfElegibles.Should().Equal(ExpectedNamesOfElegibles);
         }
+
+        [Fact]
+        public void MustGenerateAnOrderedListOfPeopleEligibleToReceiveAHouseGivenTheirFamilyWithAllCriterias()
+        {
+            Family Family1 = new(SuitorName: "Maiza", NumberOfMinorsDependents: 4, Income: 2000);
+            Family Family2 = new(SuitorName: "Lucas", NumberOfMinorsDependents: 1, Income:800);
+            Family Family3 = new(SuitorName: "Tatiane", NumberOfMinorsDependents: 2, Income:1200);
+            Family Family4 = new(SuitorName: "José", NumberOfMinorsDependents: 3, Income: 400);
+            Family Family5 = new(SuitorName: "Maria", NumberOfMinorsDependents: 2, Income: 760);
+
+            FamilyRank FamilyRank = new();
+
+            /*
+            José =>     5 + 3
+            Lucas =>    5 + 2
+            Maria =>    5 + 2
+            Tatiane =>  3 + 2
+            Maiza =>    0 + 3
+             */
+            List<string> ExpectedNamesOfElegibles = ["José", "Lucas", "Maria", "Tatiane", "Maiza"];
+
+            var ListOfFamiliesElegiblesToReceiveTheBenefit
+                = FamilyRank.RankFamilies(
+                    Families: [Family1, Family2, Family3, Family4, Family5],
+                    RankingCriterias: [new FamiliesWith3OrMoreDependents(), new FamiliesWith1Or2Dependents(), new FamiliesWithIncomeUpTo900(), new FamiliesWithIncomeFrom901To1500()]);
+
+            Console.WriteLine(ListOfFamiliesElegiblesToReceiveTheBenefit);
+
+            List<string> NamesOfElegibles = ListOfFamiliesElegiblesToReceiveTheBenefit.Select(family => family.GetSuitor().Name).ToList(); ;
+
+            NamesOfElegibles.Should().Equal(ExpectedNamesOfElegibles);
+        }
     }
 }
