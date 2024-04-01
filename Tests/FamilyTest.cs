@@ -98,8 +98,9 @@ namespace FamilyScorer.Tests
             Family Family = new(SuitorName: "Bianca", NumberOfDependents: 3, Income: 1400, NumberOfMinorsDependents:1);
 
             Family.GetMinorsDependents().Count.Should().Be(1);
-            Family.FamilyMembers.Count.Should().Be(6);
+            Family.FamilyMembers.Should().HaveCount(6);
             Family.GetSuitor().Name.Should().Be("Bianca");
+            Family.CalculateIncome().Should().Be(1400);
         }
     }
 }

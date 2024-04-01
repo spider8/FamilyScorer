@@ -1,5 +1,4 @@
-﻿using FamilyScorer.Interfaces;
-using FamilyScorer.Model;
+﻿using FamilyScorer.Model;
 using FamilyScorer.Strategies;
 using FluentAssertions;
 
@@ -10,41 +9,91 @@ namespace FamilyScorer.Tests
         [Fact]
         public void MustGenerateAnOrderedListOfPeopleEligibleToReceiveAHouseGivenTheirFamilyIncomeOfUpTo900()
         {
-            List<IFamilyMember> Members1 =
-            [
-                new FamilyMember { Id = "1", Name = "Pedro", Income = 400, Role = FamilyRole.Suitor},
-                new FamilyMember { Id = "2", Name = "Bia", Income = 400, Role = FamilyRole.Spouse},
-            ];
-
-            Family Family1 = new(Members1);
-
-            List<IFamilyMember> Members2 =
-            [
-                new FamilyMember { Id = "1", Name = "Lucas", Income = 1000, Role = FamilyRole.Suitor},
-                new FamilyMember { Id = "2", Name = "Fernanda", Income = 200, Role = FamilyRole.Spouse},
-            ];
-
-            Family Family2 = new(Members2);
-
-            List<IFamilyMember> Members3 =
-           [
-               new FamilyMember { Id = "1", Name = "Marcos", Income = 400, Role = FamilyRole.Suitor},
-               new FamilyMember { Id = "2", Name = "Luiza", Income = 500, Role = FamilyRole.Spouse},
-            ];
-
-            Family Family3 = new(Members3);
+            Family Family1 = new(SuitorName: "Pedro", Income: 800);
+            Family Family2 = new(SuitorName: "Lucas", Income: 1200);
+            Family Family3 = new(SuitorName: "Marcos", Income: 900);
 
             FamilyRank FamilyRank = new();
 
-            List<string> ExpectedNamesOfElegibles = ["Pedro", "Marcos","Lucas"];
-            
-            var ListOfFamiliesElegiblesToReceiveTheBenefit = FamilyRank.RankFamilies([Family1, Family2, Family3], [new FamiliesWithIncomeUpTo900()]);
+            List<string> ExpectedNamesOfElegibles = ["Pedro", "Marcos", "Lucas"];
+
+            var ListOfFamiliesElegiblesToReceiveTheBenefit 
+                = FamilyRank.RankFamilies(
+                    Families: [Family1, Family2, Family3],
+                    RankingCriterias: [new FamiliesWithIncomeUpTo900()]);
 
             List<string> NamesOfElegibles = ListOfFamiliesElegiblesToReceiveTheBenefit.Select(family => family.GetSuitor().Name).ToList(); ;
 
-            Console.WriteLine(ExpectedNamesOfElegibles);
             NamesOfElegibles.Should().Equal(ExpectedNamesOfElegibles);
+        }
 
+        [Fact]
+        public void MustGenerateAnOrderedListOfPeopleEligibleToReceiveAHouseGivenTheirFamilyIncomeFrom901To1500()
+        {
+            Family Family1 = new(SuitorName: "Maiza", Income: 1000);
+            Family Family2 = new(SuitorName: "Lucas", Income: 120);
+            Family Family3 = new(SuitorName: "Tatiane", Income: 900);
+            Family Family4 = new(SuitorName: "José", Income: 1600);
+            Family Family5 = new(SuitorName: "Maria", Income: 1200);
+
+            FamilyRank FamilyRank = new();
+
+            List<string> ExpectedNamesOfElegibles = ["Maiza", "Maria", "Lucas", "Tatiane", "José"];
+
+            var ListOfFamiliesElegiblesToReceiveTheBenefit
+                = FamilyRank.RankFamilies(
+                    Families: [Family1, Family2, Family3, Family4, Family5],
+                    RankingCriterias: [new FamiliesWithIncomeFrom901To1500()]);
+
+            List<string> NamesOfElegibles = ListOfFamiliesElegiblesToReceiveTheBenefit.Select(family => family.GetSuitor().Name).ToList(); ;
+
+            NamesOfElegibles.Should().Equal(ExpectedNamesOfElegibles);
+        }
+
+        [Fact]
+        public void MustGenerateAnOrderedListOfPeopleEligibleToReceiveAHouseGivenTheirFamilyWith1Or2Dependents()
+        {
+            Family Family1 = new(SuitorName: "Maiza", NumberOfMinorsDependents:4);
+            Family Family2 = new(SuitorName: "Lucas", NumberOfMinorsDependents: 1);
+            Family Family3 = new(SuitorName: "Tatiane", NumberOfMinorsDependents:2);
+            Family Family4 = new(SuitorName: "José", NumberOfMinorsDependents:3);
+            Family Family5 = new(SuitorName: "Maria", NumberOfMinorsDependents:2);
+
+            FamilyRank FamilyRank = new();
+
+            List<string> ExpectedNamesOfElegibles = ["Lucas", "Tatiane", "Maria", "Maiza", "José"];
+
+            var ListOfFamiliesElegiblesToReceiveTheBenefit
+                = FamilyRank.RankFamilies(
+                    Families: [Family1, Family2, Family3, Family4, Family5],
+                    RankingCriterias: [new FamiliesWith1Or2Dependents()]);
+
+            List<string> NamesOfElegibles = ListOfFamiliesElegiblesToReceiveTheBenefit.Select(family => family.GetSuitor().Name).ToList(); ;
+
+            NamesOfElegibles.Should().Equal(ExpectedNamesOfElegibles);
+        }
+
+        [Fact]
+        public void MustGenerateAnOrderedListOfPeopleEligibleToReceiveAHouseGivenTheirFamilyWith3OrMoreDependents()
+        {
+            Family Family1 = new(SuitorName: "Maiza", NumberOfMinorsDependents: 4);
+            Family Family2 = new(SuitorName: "Lucas", NumberOfMinorsDependents: 1);
+            Family Family3 = new(SuitorName: "Tatiane", NumberOfMinorsDependents: 2);
+            Family Family4 = new(SuitorName: "José", NumberOfMinorsDependents: 3);
+            Family Family5 = new(SuitorName: "Maria", NumberOfMinorsDependents: 2);
+
+            FamilyRank FamilyRank = new();
+
+            List<string> ExpectedNamesOfElegibles = ["Maiza", "José", "Lucas", "Tatiane", "Maria"];
+
+            var ListOfFamiliesElegiblesToReceiveTheBenefit
+                = FamilyRank.RankFamilies(
+                    Families: [Family1, Family2, Family3, Family4, Family5],
+                    RankingCriterias: [new FamiliesWith3OrMoreDependents()]);
+
+            List<string> NamesOfElegibles = ListOfFamiliesElegiblesToReceiveTheBenefit.Select(family => family.GetSuitor().Name).ToList(); ;
+
+            NamesOfElegibles.Should().Equal(ExpectedNamesOfElegibles);
         }
     }
 }

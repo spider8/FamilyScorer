@@ -43,7 +43,7 @@ namespace FamilyScorer.Model
             return counterId++.ToString();
         }
 
-        public Family(string SuitorName, int NumberOfDependents, int Income, int NumberOfMinorsDependents)
+        public Family(string SuitorName, int NumberOfDependents = 0, int Income = 0, int NumberOfMinorsDependents = 0)
         {
             // Create a suitor
             FamilyMembers.Add(new FamilyMember() { Name = SuitorName, Id = GenerateANewId(), Income = Income, Role = FamilyRole.Suitor, });

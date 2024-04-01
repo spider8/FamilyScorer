@@ -2,15 +2,15 @@
 
 namespace FamilyScorer.Strategies
 {
-    public class FamiliesWithIncomeUpTo900 : IRankingCriteria
+    public class FamiliesWith1Or2Dependents : IRankingCriteria
     {
-        readonly int points = 5;
+        readonly int points = 2;
 
         public int Rank(IFamily Family)
         {
-            int familyIncome = Family.CalculateIncome();
+            int familyDepedents = Family.GetMinorsDependents().Count;
 
-            if (familyIncome <= 900)
+            if (familyDepedents > 0 && familyDepedents <= 2)
             {
                 return points;
             }
